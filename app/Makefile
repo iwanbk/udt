@@ -1,5 +1,5 @@
 C++ = g++
-
+CC = gcc
 ifndef os
    os = LINUX
 endif
@@ -38,13 +38,20 @@ endif
 
 DIR = $(shell pwd)
 
-APP = appserver appclient sendfile recvfile test
+APP = appserver appclient sendfile recvfile test server client
 
 all: $(APP)
 
 %.o: %.cpp
 	$(C++) $(CCFLAGS) $< -c
 
+%.o: %.c
+	$(CC) $(CCFLAGS) $< -c
+
+server: server.o
+	$(CC) ../src/udtc.cpp  $^ -o $@ $(LDFLAGS)
+client: client.o
+	$(CC) ../src/udtc.cpp  $^ -o $@ $(LDFLAGS)
 appserver: appserver.o
 	$(C++) $^ -o $@ $(LDFLAGS)
 appclient: appclient.o
